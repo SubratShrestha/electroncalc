@@ -1,18 +1,27 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Button, Flex } from "@chakra-ui/react";
 import { FunctionComponent } from "react";
 
-const NumberButton: FunctionComponent<{value: string}> = ({ value }) => {
+type NumberButtonProps = {
+    value: string,
+    bg: string,
+    onClick: (event: React.MouseEvent<HTMLButtonElement>) => void
+}
+
+const NumberButton = ({value, bg, onClick}: NumberButtonProps) => {
   return (
-    <Flex
-      h={14}
-      w={14}
+    <Button
+      value={value}
+      h={20}
+      w={20}
+      m={1}
+      onClick={onClick}
+      bgColor={bg}
       borderRadius="50%"
-      backgroundColor="red"
       justifyContent="center"
       alignItems="center"
     >
-      {value}
-    </Flex>
+    {value}
+    </Button>
   );
 };
 
