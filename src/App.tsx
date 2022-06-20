@@ -8,18 +8,29 @@ import {
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import NumberButton from "./components/NumberButton";
-import { create, all } from "mathjs"
+import { create, all } from "mathjs";
 
-const config = {}
-const math = create(all, config)
+/*
+ * TODO:
+ * [ ] theming
+ * [ ] equals button effect
+ * [ ] clear effect
+ * [ ] readme
+ * [ ] release build with electron-forge: https://www.electronjs.org/docs/latest/tutorial/quick-start#package-and-distribute-your-application
+ * */
+
+const math = create(all, {});
 
 function App() {
   const [result, setResult] = useState("");
   const { toggleColorMode } = useColorMode();
+
+  // colors
   const bg = useColorModeValue("bgLight", "bgDark");
   const resultColor = useColorModeValue("resultLight", "resultDark");
   const numberBg = useColorModeValue("numberBgLight", "numberBgDark");
-  const opBg = useColorModeValue("opLight", "opDark")
+  const opBg = useColorModeValue("opLight", "opDark");
+
   const values = [
     ["C", "(", ")", "<"],
     ["!", "%", "/", "^"],
@@ -31,16 +42,16 @@ function App() {
   const ops = ["+", "-", "*", "!", "%", "/", ".", "√", "C", "(", ")", "<", "^"];
 
   const onClickHandler = (v: string) => {
-    if (v === "C") setResult("");
-    else if (v === "<") setResult(result.slice(0, -1));
+    if (v === "C") setResult(""); // clear
+    else if (v === "<") setResult(result.slice(0, -1)); // backspace
+    else if (v === "√") setResult(result + "sqrt("); // square root
+    // operators can't repeat
     else if (ops.includes(v))
       setResult((prevResult) => {
-            if (ops.includes(prevResult[prevResult.length -1])) return prevResult;
-            else return prevResult + v;
-        }
-      );
-    else if (v === "√") setResult(result + "sqrt(")
-    else if (v === "=") setResult(math.evaluate(result))
+        if (ops.includes(prevResult[prevResult.length - 1])) return prevResult;
+        return prevResult + v;
+      });
+    else if (v === "=") setResult(math.evaluate(result));
     else setResult(result + v);
   };
 
